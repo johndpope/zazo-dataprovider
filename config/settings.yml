@@ -1,0 +1,16 @@
+defaults: &settings
+  version: 0.0.1
+  app_name: Zazo DataProvider
+  app_name_key: dataprovider
+
+development:
+  <<: *settings
+
+test:
+  <<: *settings
+
+staging:
+  <<: *settings
+
+production:
+  <<: *settings
