@@ -1,5 +1,8 @@
 rollbar_access_token:
 
+renotification_password:
+friendfinder_password:
+
 users_db_host:
 users_db_name:
 users_db_username:
