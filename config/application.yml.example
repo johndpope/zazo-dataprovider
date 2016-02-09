@@ -1,0 +1,11 @@
+rollbar_access_token:
+
+users_db_host:
+users_db_name:
+users_db_username:
+users_db_password:
+
+events_db_host:
+events_db_name:
+events_db_username:
+events_db_password:
