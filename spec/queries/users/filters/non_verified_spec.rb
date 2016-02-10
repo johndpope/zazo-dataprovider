@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Fetch::Users::NotVerified, type: :model do
+RSpec.describe Users::Filters::NonVerified, type: :model do
   let(:instance) { described_class.new }
 
   let!(:conn) { FactoryGirl.create :connection }
@@ -9,7 +9,7 @@ RSpec.describe Fetch::Users::NotVerified, type: :model do
     subject { instance.execute }
 
     it do
-      result = {
+      expected = {
         'id'            => conn.target.id,
         'mkey'          => conn.target.mkey,
         'connection_id' => conn.id,
@@ -17,7 +17,7 @@ RSpec.describe Fetch::Users::NotVerified, type: :model do
         'invitee'       => conn.target.name,
         'inviter'       => conn.creator.name
       }
-      is_expected.to include result
+      is_expected.to include expected
     end
   end
 end

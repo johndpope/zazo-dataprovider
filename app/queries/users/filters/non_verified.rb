@@ -1,12 +1,15 @@
-class Fetch::Users::NotVerified < Fetch::Base
+class Users::Filters::NonVerified < Query::Base
+  include Query::Shared::RunRawQuery
+  include Query::Shared::StripData
+
   def execute
-    strip_data query
+    strip_data run_raw_query_on_users(query), %w(invitee inviter)
   end
 
   private
 
   def query
-    sql = <<-SQL
+    <<-SQL
       SELECT
         users.id,
         users.mkey,
@@ -29,6 +32,5 @@ class Fetch::Users::NotVerified < Fetch::Base
                                   connections.created_at = max_time_zero.time_zero
         INNER JOIN users inviters ON inviters.id = connections.creator_id
     SQL
-    User.connection.select_all sql
   end
 end

@@ -1,9 +1,8 @@
-class Fetch::Users::IdsAndNames < Fetch::Base
-  attr_accessor :users
+class Users::Queries::IdsAndNames < Query::Base
+  attr_reader :users
+  validates   :users, presence: true
 
   after_initialize :set_options
-
-  validates :users, presence: true
 
   def execute
     User.where(mkey: users).each_with_object({}) do |user, memo|
@@ -14,6 +13,6 @@ class Fetch::Users::IdsAndNames < Fetch::Base
   private
 
   def set_options
-    @users = options['users']
+    @users = options[:users]
   end
 end

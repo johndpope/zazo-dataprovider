@@ -1,11 +1,18 @@
-class Fetch::Users::ConnectionIds < Fetch::Base
-  attr_accessor :users, :friends # mkeys
+class Users::Queries::ConnectionIds < Query::Base
+  include Query::Shared::RunRawQuery
+
+  attr_reader :users, :friends
+  validates   :users, :friends, presence: true
 
   after_initialize :set_options
 
-  validates :users, :friends, presence: true
-
   def execute
+    run_raw_query_on_users(query)
+  end
+
+  private
+
+  def query
     sql = <<-SQL
       SELECT
         CONCAT(users.mkey, '-', friends.mkey) relation,
@@ -21,14 +28,11 @@ class Fetch::Users::ConnectionIds < Fetch::Base
       WHERE (connections.creator_id = users.id AND connections.target_id = friends.id) OR
             (connections.creator_id = friends.id AND connections.target_id = users.id)
     SQL
-    sql = User.send :sanitize_sql_array, [sql, users, friends]
-    User.connection.select_all sql
+    User.send :sanitize_sql_array, [sql, users, friends]
   end
 
-  private
-
   def set_options
-    @users   = options['users']
-    @friends = options['friends']
+    @users   = options[:users]
+    @friends = options[:friends]
   end
 end

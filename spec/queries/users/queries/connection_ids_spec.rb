@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Fetch::Users::ConnectionIds, type: :model do
+RSpec.describe Users::Queries::ConnectionIds, type: :model do
   let(:instance) { described_class.new users: users, friends: friends }
 
   let!(:conn_1) { FactoryGirl.create :connection }
@@ -12,7 +12,7 @@ RSpec.describe Fetch::Users::ConnectionIds, type: :model do
     subject { instance.execute }
 
     it do
-      results = [
+      expected = [
         {
           'relation'      => "#{conn_1.target.mkey}-#{conn_1.creator.mkey}",
           'connection_id' => conn_1.id,
@@ -20,7 +20,7 @@ RSpec.describe Fetch::Users::ConnectionIds, type: :model do
           'friend_mkey'   => conn_1.creator.mkey,
           'user_id'       => conn_1.target.id,
           'friend_id'     => conn_1.creator.id
-        },{
+        }, {
           'relation'      => "#{conn_2.target.mkey}-#{conn_2.creator.mkey}",
           'connection_id' => conn_2.id,
           'user_mkey'     => conn_2.target.mkey,
@@ -29,7 +29,7 @@ RSpec.describe Fetch::Users::ConnectionIds, type: :model do
           'friend_id'     => conn_2.creator.id
         }
       ]
-      is_expected.to include *results
+      is_expected.to match_array expected
     end
   end
 end

@@ -1,12 +1,14 @@
-class Fetch::Users::SpecificUsers < Fetch::Base
-  attr_accessor :users
+class Users::Filters::SpecificUsers < Query::Base
+  include Query::Shared::RunRawQuery
+  include Query::Shared::StripData
+
+  attr_reader :users
+  validates   :users, presence: true
 
   after_initialize :set_options
 
-  validates :users, presence: true
-
   def execute
-    strip_data query
+    strip_data run_raw_query_on_users(query), %w(invitee inviter)
   end
 
   private
@@ -35,11 +37,10 @@ class Fetch::Users::SpecificUsers < Fetch::Base
                                   connections.created_at = max_time_zero.time_zero
         INNER JOIN users inviters ON inviters.id = connections.creator_id
     SQL
-    sql = User.send :sanitize_sql_array, [sql, users]
-    User.connection.select_all sql
+    User.send :sanitize_sql_array, [sql, users]
   end
 
   def set_options
-    @users = options['users']
+    @users = options[:users]
   end
 end
