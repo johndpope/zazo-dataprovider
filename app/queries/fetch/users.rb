@@ -1,2 +1,0 @@
-module Fetch::Users
-end

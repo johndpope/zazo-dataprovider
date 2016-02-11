@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Users::Queries::Attributes, type: :model do
-  let!(:conn) { FactoryGirl.create :connection }
+  let!(:conn) do
+    target = FactoryGirl.create :user, mobile_number: '+380939523747'
+    FactoryGirl.create :connection, target: target
+  end
   let(:user) { conn.target.mkey }
   let(:instance) { described_class.new options }
 
@@ -21,6 +24,14 @@ RSpec.describe Users::Queries::Attributes, type: :model do
         }
         is_expected.to eq expected
       end
+    end
+
+    context 'country' do
+      let(:options) do
+        { user: user, attrs: :country }
+      end
+
+      it { is_expected.to eq country: 'UA' }
     end
   end
 
