@@ -1,40 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::FetchController, type: :controller do
-  before do
-    allow_any_instance_of(described_class).to receive(:authenticate).and_return true
+  def send_http_request(method, entity, prefix, name, options = {})
+    send method, :show, options.merge(entity: entity, prefix: prefix, name: name)
   end
 
-  describe 'GET #show' do
-    subject { get :show, id: '', name: :anything }
-
-    it do
-      subject
-      expect(response).to have_http_status(:not_found)
-      expect(json_response).to eq('errors' => 'Anything class not found')
-    end
-  end
-
-  describe 'GET "users/:name"' do
-    subject { get :show, id: '', prefix: :users, name: name }
-
-    context 'unknown' do
-      let(:name) { :unknown }
-
-      it do
-        subject
-        expect(response).to have_http_status(:not_found)
-        expect(json_response).to eq('errors' => 'Users::Unknown class not found')
+  [:get, :post].each do |method|
+    describe "#{method.upcase} users entity" do
+      before do
+        authenticate_with_http_digest { send_http_request method, *params }
       end
-    end
 
-    context 'not_verified' do
-      let(:name) { :not_verified }
+      context 'existing query, valid options' do
+        let(:params) { [:users, :prefix, :sample_query, is_valid: true] }
 
-      it do
-        subject
-        expect(response).to have_http_status(:success)
-        expect(json_response).to be_a(Array)
+        it { expect(response).to have_http_status(:success) }
+        it { expect(json_response).to eq 'result' => 'success' }
+      end
+
+      context 'existing query, invalid options' do
+        let(:params) { [:users, :prefix, :sample_query, is_valid: false] }
+
+        it { expect(response).to have_http_status(:unprocessable_entity) }
+        it { expect(json_response).to eq 'errors' => '{:is_valid=>["is not valid"]}' }
+      end
+
+      context 'nonexistent query' do
+        let(:params) { [:users, :prefix, :nonexistent] }
+
+        it { expect(response).to have_http_status(:not_found) }
+        it { expect(json_response).to eq 'errors' => 'Users::Prefix::Nonexistent class not found' }
       end
     end
   end

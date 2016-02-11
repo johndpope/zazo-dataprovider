@@ -11,7 +11,7 @@ RSpec.describe Users::Filters::SpecificUsers, type: :model do
     subject { instance.execute }
 
     it do
-      expected = [
+      is_expected.to match_array [
         {
           'id'            => conn_1.target.id,
           'mkey'          => conn_1.target.mkey,
@@ -28,7 +28,6 @@ RSpec.describe Users::Filters::SpecificUsers, type: :model do
           'inviter'       => conn_2.creator.name
         }
       ]
-      is_expected.to match_array expected
     end
   end
 end

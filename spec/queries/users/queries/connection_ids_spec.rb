@@ -12,7 +12,7 @@ RSpec.describe Users::Queries::ConnectionIds, type: :model do
     subject { instance.execute }
 
     it do
-      expected = [
+      is_expected.to match_array [
         {
           'relation'      => "#{conn_1.target.mkey}-#{conn_1.creator.mkey}",
           'connection_id' => conn_1.id,
@@ -29,7 +29,6 @@ RSpec.describe Users::Queries::ConnectionIds, type: :model do
           'friend_id'     => conn_2.creator.id
         }
       ]
-      is_expected.to match_array expected
     end
   end
 end
