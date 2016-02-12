@@ -2,14 +2,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :fetch, only: [] do
-        url_action = -> (entity) do
-          { ':entity/:prefix/:name' => :show, entity: entity }
-        end
-
         %i(users).each do |entity|
           collection do
-            get  url_action.call(entity)
-            post url_action.call(entity)
+            get  ':entity/:prefix/:name' => :show, entity: entity
+            post ':entity/:prefix/:name' => :show, entity: entity
           end
         end
       end
