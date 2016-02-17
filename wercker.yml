@@ -44,8 +44,11 @@ deploy:
   box: vano468/awseb-wercker-deploy
   steps:
     - script:
-        name: git clone to project
-        code: git clone $REPO_URL project
+        name: set up ssh key
+        code: /opt/setup/github_ssh_key.sh
+    - script:
+        name: clone project
+        code: /opt/action/clone_repo.sh
     - script:
         name: setup aws and eb config
         code: /opt/setup/aws_eb_conf.sh
