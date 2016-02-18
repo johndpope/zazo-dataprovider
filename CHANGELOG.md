@@ -1,5 +1,9 @@
 # Changelog
 
+### v0.1.5
+- :hammer: Fixed after build slack notifier
+- :hammer: Changed box owner for wercker deployment
+
 ### v0.1.4
 - :bulb: Added slack notifier to wercker after-deploy steps
 
