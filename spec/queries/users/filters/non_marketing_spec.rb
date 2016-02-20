@@ -50,7 +50,7 @@ RSpec.describe Users::Filters::NonMarketing, type: :model do
         Timecop.travel(4.weeks.ago) do
           10.times { send_invite_at_flow gen_hash, gen_hash }
         end
-        Timecop.travel(1.week.ago) do
+        Timecop.travel(5.days.ago) do
           10.times { send_invite_at_flow gen_hash, gen_hash }
         end
       end

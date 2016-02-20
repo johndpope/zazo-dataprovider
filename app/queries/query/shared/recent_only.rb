@@ -1,5 +1,5 @@
 module Query::Shared::RecentOnly
-  DEFAULT_RECENT_PERIOD = 2.weeks.ago.to_s
+  DEFAULT_RECENT_PERIOD = 1.week.ago.to_s
 
   def self.included(base)
     base.extend  ClassMethods

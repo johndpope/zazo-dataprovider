@@ -49,7 +49,7 @@ RSpec.describe Users::Filters::NonVerified, type: :model do
         Timecop.travel(4.weeks.ago) do
           10.times { FactoryGirl.create :connection }
         end
-        Timecop.travel(1.week.ago) do
+        Timecop.travel(5.days.ago) do
           10.times { FactoryGirl.create :connection }
         end
       end
