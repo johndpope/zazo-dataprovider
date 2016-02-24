@@ -1,8 +1,13 @@
 class Users::Filters::NonMarketing < Query::Base
   include Query::Shared::RunRawQuery
+  include Query::Shared::Pagination
+  include Query::Shared::RecentOnly
+
+  recent_only_settings column: 'invited.time_zero',
+                       append: true
 
   def execute
-    run_raw_query_on_events query
+    run_raw_query_on_events(query).to_a
   end
 
   private
@@ -25,6 +30,8 @@ class Users::Filters::NonMarketing < Query::Base
         WHERE
           name @> ARRAY['user', 'invitation_sent']::VARCHAR[] AND
           EXTRACT(EPOCH FROM events.triggered_at - invited.time_zero) < 1
+      #{recent_only_query_part}
+      #{pagination_query_part}
     SQL
   end
 end
