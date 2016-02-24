@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.2.0
+- :bulb: Added pagination and recent option for filter queries
+
 ### v0.1.5
 - :hammer: Fixed after build slack notifier
 - :hammer: Changed box owner for wercker deployment
