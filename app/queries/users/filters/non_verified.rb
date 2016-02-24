@@ -1,6 +1,10 @@
 class Users::Filters::NonVerified < Query::Base
   include Query::Shared::RunRawQuery
   include Query::Shared::StripData
+  include Query::Shared::Pagination
+  include Query::Shared::RecentOnly
+
+  recent_only_settings column: 'max_time_zero.time_zero'
 
   def execute
     strip_data run_raw_query_on_users(query), %w(invitee inviter)
@@ -31,6 +35,8 @@ class Users::Filters::NonVerified < Query::Base
         INNER JOIN connections ON connections.target_id = users.id AND
                                   connections.created_at = max_time_zero.time_zero
         INNER JOIN users inviters ON inviters.id = connections.creator_id
+      #{recent_only_query_part}
+      #{pagination_query_part}
     SQL
   end
 end

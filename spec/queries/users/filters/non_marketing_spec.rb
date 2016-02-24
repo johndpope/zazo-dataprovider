@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Users::Filters::NonVerified, type: :model do
+RSpec.describe Users::Filters::NonMarketing, type: :model do
   let(:instance) { described_class.new params }
 
   describe '#execute' do
@@ -8,24 +8,25 @@ RSpec.describe Users::Filters::NonVerified, type: :model do
 
     describe 'structure' do
       let(:params) { {} }
-      let!(:conn) { FactoryGirl.create :connection }
+      let(:time) { '2016-02-19 00:00:00' }
+      let(:inviter) { gen_hash }
+      let(:invitee) { gen_hash }
+
+      before { send_invite_at_flow inviter, invitee, time }
 
       it do
         expected = {
-          'id'            => conn.target.id,
-          'mkey'          => conn.target.mkey,
-          'connection_id' => conn.id,
-          'time_zero'     => conn.created_at.to_s,
-          'invitee'       => conn.target.name,
-          'inviter'       => conn.creator.name
+          'invitee'   => invitee,
+          'inviter'   => inviter,
+          'time_zero' => time
         }
-        is_expected.to include expected
+        is_expected.to eq [expected]
       end
     end
 
     describe 'pagination' do
       before do
-        99.times { FactoryGirl.create :connection }
+        99.times { send_invite_at_flow gen_hash, gen_hash }
       end
 
       context 'page 1' do
@@ -47,10 +48,10 @@ RSpec.describe Users::Filters::NonVerified, type: :model do
     describe 'recent' do
       before do
         Timecop.travel(4.weeks.ago) do
-          10.times { FactoryGirl.create :connection }
+          10.times { send_invite_at_flow gen_hash, gen_hash }
         end
         Timecop.travel(5.days.ago) do
-          10.times { FactoryGirl.create :connection }
+          10.times { send_invite_at_flow gen_hash, gen_hash }
         end
       end
 
