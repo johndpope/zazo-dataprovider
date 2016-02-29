@@ -1,5 +1,10 @@
 # Changelog
 
+### v0.2.1
+- :arrow_up: Updated shared subtree (staging settings for database config)
+- :bulb: Added staging env config
+- :bulb: Added newrelic config
+
 ### v0.2.0
 - :bulb: Added pagination and recent option for filter queries
 
