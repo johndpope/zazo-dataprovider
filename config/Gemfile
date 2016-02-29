@@ -56,7 +56,6 @@ gem 'hashie'
 
 gem 'puma'
 gem 'newrelic_rpm'
-gem 'remote_syslog_logger'
 gem 'foreman'
 
 group :test do
