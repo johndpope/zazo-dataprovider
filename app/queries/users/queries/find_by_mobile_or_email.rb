@@ -4,7 +4,8 @@ class Users::Queries::FindByMobileOrEmail < Query::Base
   after_initialize :set_options
 
   def execute
-    user = User.where(mobile_number: mobile).first
+    user = nil
+    user = User.where(mobile_number: mobile).first if mobile
     user = User.where('emails LIKE ?', "%#{email}%").first if !user && email
     { id: user.try(:id), mkey: user.try(:mkey) }
   end
