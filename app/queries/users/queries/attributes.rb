@@ -8,7 +8,10 @@ class Users::Queries::Attributes < Query::Base
   after_initialize :set_options
 
   def execute
-    attrs.each_with_object({}) { |attr, memo| memo[attr] = user.send attr }
+    attrs.each_with_object({}) do |attr, memo|
+      memo[attr] = user.respond_to?(attr) ?
+        user.send(attr) : Classifier.as_klass(self.class.name, attr).new(user).value
+    end
   end
 
   private

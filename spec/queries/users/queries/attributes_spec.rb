@@ -33,6 +33,22 @@ RSpec.describe Users::Queries::Attributes, type: :model do
 
       it { is_expected.to eq country: 'UA' }
     end
+
+    context 'friends' do
+      let!(:friend_conn_1) { FactoryGirl.create :connection, target: conn.target }
+      let!(:friend_conn_2) { FactoryGirl.create :connection, creator: conn.target }
+      let(:options) { { user: user, attrs: :friends } }
+
+      before do
+        # non-friend connections
+        10.times { FactoryGirl.create :connection }
+      end
+
+      it do
+        expected = [friend_conn_1.creator.mkey, friend_conn_2.target.mkey, conn.creator.mkey]
+        expect(subject[:friends]).to match_array expected
+      end
+    end
   end
 
   describe 'validations' do
