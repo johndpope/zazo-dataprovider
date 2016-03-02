@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.3.0
+- :bulb: Migrated ZazoFriendFinder API from ZazoStatistics to ZazoDataProvider
+
 ### v0.2.1
 - :arrow_up: Updated shared subtree (staging settings for database config)
 - :bulb: Added staging env config
