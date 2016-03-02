@@ -22,7 +22,7 @@ RSpec.describe Api::V1::FetchController, type: :controller do
         let(:params) { [:users, :prefix, :sample_query, is_valid: false] }
 
         it { expect(response).to have_http_status(:unprocessable_entity) }
-        it { expect(json_response).to eq 'errors' => '{:is_valid=>["is not valid"]}' }
+        it { expect(json_response).to eq 'errors' => { 'is_valid' => ['is not valid']} }
       end
 
       context 'nonexistent query' do
