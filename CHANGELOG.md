@@ -1,5 +1,9 @@
 # Changelog
 
+### v0.3.1
+- :bulb: Added `ActiveFriends` users query
+- :hammer: Refactored `Friends` users query
+
 ### v0.3.0
 - :bulb: Migrated ZazoFriendFinder API from ZazoStatistics to ZazoDataProvider
 
