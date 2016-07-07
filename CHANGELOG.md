@@ -1,7 +1,8 @@
 # Changelog
 
 ### next release
-- :bulb: Extended `Users::Queries::Attributes` query to accept `users` array
+- :arrow_up: Extended `Users::Queries::Attributes` query to accept `users` array
+- :arrow_up: Updated wercker config
 
 ### v0.3.1
 - :bulb: Added `ActiveFriends` users query
