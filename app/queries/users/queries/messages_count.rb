@@ -33,7 +33,7 @@ class Users::Queries::MessagesCount < Query::Base
         FROM video_events
         WHERE sender != ?
     SQL
-    Event.send :sanitize_sql_array, [sql] + [user_mkey] * 5
+    Event.send(:sanitize_sql_array, [sql] + [user_mkey] * 5)
   end
 
   def set_options
