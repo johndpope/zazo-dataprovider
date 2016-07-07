@@ -1,5 +1,5 @@
 class Users::Queries::Attributes < Query::Base
-  ALLOWED_ATTRS = %i(id mkey auth status first_name last_name mobile_number device_platform emails country friends active_friends)
+  ALLOWED_ATTRS = %i(id mkey auth status first_name last_name mobile_number device_platform emails country friends active_friends verified_at)
 
   attr_accessor :user, :users, :attrs
   validates :attrs, presence: true
