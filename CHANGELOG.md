@@ -3,6 +3,7 @@
 ### next release
 - :arrow_up: Extended `Users::Queries::Attributes` query to accept `users` array
 - :arrow_up: Updated wercker config
+- :arrow_up: Bumped `nokogirl` gem
 
 ### v0.3.1
 - :bulb: Added `ActiveFriends` users query
