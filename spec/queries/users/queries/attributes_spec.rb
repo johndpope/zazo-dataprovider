@@ -2,59 +2,96 @@ require 'rails_helper'
 
 RSpec.describe Users::Queries::Attributes, type: :model do
   let!(:conn) do
-    target = FactoryGirl.create :user, mobile_number: '+380939523747'
-    FactoryGirl.create :connection, target: target
+    target = FactoryGirl.create(:user, mobile_number: '+380939523747')
+    FactoryGirl.create(:connection, target: target)
   end
   let(:user) { conn.target.mkey }
-  let(:instance) { described_class.new options }
+  let(:instance) { described_class.new(options) }
 
   describe '#execute' do
     subject { instance.execute }
 
-    context 'mkey, first_name, status' do
-      let(:options) do
-        { user: user, attrs: [:mkey, :first_name, :status] }
+    context 'when single user' do
+      describe 'mkey, first_name, status' do
+        let(:options) { { user: user, attrs: [:mkey, :first_name, :status] } }
+
+        it do
+          expected = {
+            mkey:       conn.target.mkey,
+            first_name: conn.target.first_name,
+            status:     conn.target.status }
+          is_expected.to eq(expected)
+        end
       end
 
-      it do
-        expected = {
-          mkey:       conn.target.mkey,
-          first_name: conn.target.first_name,
-          status:     conn.target.status
-        }
-        is_expected.to eq expected
+      describe 'country' do
+        let(:options) { { user: user, attrs: :country } }
+
+        it { is_expected.to eq(country: 'UA') }
+      end
+
+      describe 'friends' do
+        let!(:friend_conn_1) { FactoryGirl.create(:connection, target: conn.target) }
+        let!(:friend_conn_2) { FactoryGirl.create(:connection, creator: conn.target) }
+        let(:options) { { user: user, attrs: :friends } }
+
+        before do
+          # non-friend connections
+          10.times { FactoryGirl.create(:connection) }
+        end
+
+        it do
+          expected = [friend_conn_1.creator.mkey, friend_conn_2.target.mkey, conn.creator.mkey]
+          expect(subject[:friends]).to match_array(expected)
+        end
+      end
+
+      describe 'verified_at' do
+        let(:options) { { user: user, attrs: :verified_at } }
+
+        before { verify_at(user, Time.parse('01-01-2016')) }
+
+        it { is_expected.to eq(verified_at: Time.parse('01-01-2016')) }
       end
     end
 
-    context 'country' do
-      let(:options) do
-        { user: user, attrs: :country }
+    context 'when collection of users' do
+      let!(:users) { 5.times.map { FactoryGirl.create(:user) } }
+
+      describe 'mkey, first_name, status' do
+        let(:options) { { users: users.map(&:mkey), attrs: [:mkey, :first_name, :status] } }
+
+        it do
+          expected = users.map { |u| { mkey: u.mkey, first_name: u.first_name, status: u.status } }
+          is_expected.to match_array(expected)
+        end
       end
 
-      it { is_expected.to eq country: 'UA' }
-    end
+      describe 'verified_at' do
+        let(:options) { { users: users.map(&:mkey), attrs: [:mkey, :verified_at] } }
 
-    context 'friends' do
-      let!(:friend_conn_1) { FactoryGirl.create :connection, target: conn.target }
-      let!(:friend_conn_2) { FactoryGirl.create :connection, creator: conn.target }
-      let(:options) { { user: user, attrs: :friends } }
+        before do
+          5.times { |n| verify_at(users[n].mkey, Time.parse("#{n+1}-01-2016")) }
+        end
 
-      before do
-        # non-friend connections
-        10.times { FactoryGirl.create :connection }
-      end
-
-      it do
-        expected = [friend_conn_1.creator.mkey, friend_conn_2.target.mkey, conn.creator.mkey]
-        expect(subject[:friends]).to match_array expected
+        it do
+          expected = [
+            { mkey: users[0].mkey, verified_at: Time.parse('01-01-2016') },
+            { mkey: users[1].mkey, verified_at: Time.parse('02-01-2016') },
+            { mkey: users[2].mkey, verified_at: Time.parse('03-01-2016') },
+            { mkey: users[3].mkey, verified_at: Time.parse('04-01-2016') },
+            { mkey: users[4].mkey, verified_at: Time.parse('05-01-2016') }
+          ]
+          is_expected.to match_array(expected)
+        end
       end
     end
   end
 
   describe 'validations' do
-    before  { instance.valid? }
-    subject { instance.valid? }
     let(:errors) { instance.errors.messages }
+    subject { instance.valid? }
+    before  { instance.valid? }
 
     context 'without options' do
       let(:options) { Hash.new }

@@ -2,7 +2,7 @@ class Users::Queries::ConnectionIds < Query::Base
   include Query::Shared::RunRawQuery
 
   attr_reader :users, :friends
-  validates   :users, :friends, presence: true
+  validates :users, :friends, presence: true
 
   after_initialize :set_options
 
@@ -28,7 +28,7 @@ class Users::Queries::ConnectionIds < Query::Base
       WHERE (connections.creator_id = users.id AND connections.target_id = friends.id) OR
             (connections.creator_id = friends.id AND connections.target_id = users.id)
     SQL
-    User.send :sanitize_sql_array, [sql, users, friends]
+    User.send(:sanitize_sql_array, [sql, users, friends])
   end
 
   def set_options

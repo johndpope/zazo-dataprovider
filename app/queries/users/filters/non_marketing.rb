@@ -3,8 +3,7 @@ class Users::Filters::NonMarketing < Query::Base
   include Query::Shared::Pagination
   include Query::Shared::RecentOnly
 
-  recent_only_settings column: 'invited.time_zero',
-                       append: true
+  recent_only_settings column: 'invited.time_zero', append: true
 
   def execute
     run_raw_query_on_events(query).to_a
