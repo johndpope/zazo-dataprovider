@@ -1,5 +1,11 @@
 # Changelog
 
+### v0.3.2
+- :bulb: Refactored `Users::Queries::Attributes` query to get attributes on collection
+- :arrow_up: Extended `Users::Queries::Attributes` query to accept `users` array
+- :arrow_up: Updated wercker config
+- :arrow_up: Bumped `nokogirl` gem
+
 ### v0.3.1
 - :bulb: Added `ActiveFriends` users query
 - :hammer: Refactored `Friends` users query

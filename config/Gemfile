@@ -17,6 +17,8 @@ gem 'phonelib'
 gem 'global_phone'
 gem 'enum_handler', github: 'asux/enum_handler'
 
+gem 'pry-rails'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -25,6 +27,7 @@ group :development do
   gem 'guard-pow', require: false
   gem 'guard-rspec', require: false
   gem 'guard-zeus'
+  gem 'guard-migrate'
   gem 'terminal-notifier-guard'
   gem 'rack-mini-profiler'
   gem 'bullet'
@@ -33,8 +36,10 @@ end
 group :development, :test do
   gem 'pry-rescue'
   gem 'pry-remote'
-  gem 'pry-byebug', '= 1.3.3'
+  gem 'pry-byebug'
   gem 'rspec-rails'
+  gem 'jazz_fingers'
+  gem 'fuubar'
 end
 
 group :test do
