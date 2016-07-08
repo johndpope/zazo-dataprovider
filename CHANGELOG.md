@@ -1,6 +1,7 @@
 # Changelog
 
 ### next release
+- :bulb: Refactored `Users::Queries::Attributes` query to get attributes on collection
 - :arrow_up: Extended `Users::Queries::Attributes` query to accept `users` array
 - :arrow_up: Updated wercker config
 - :arrow_up: Bumped `nokogirl` gem
