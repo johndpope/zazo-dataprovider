@@ -45,16 +45,43 @@ RSpec.describe Users::Queries::Attributes, type: :model do
           expect(subject[:friends]).to match_array(expected)
         end
       end
+
+      describe 'verified_at' do
+        let(:options) { { user: user, attrs: :verified_at } }
+
+        before { verify_at(user, Time.parse('01-01-2016')) }
+
+        it { is_expected.to eq(verified_at: Time.parse('01-01-2016')) }
+      end
     end
 
     context 'when collection of users' do
-      let(:users) { 5.times.map { FactoryGirl.create(:user) } }
+      let!(:users) { 5.times.map { FactoryGirl.create(:user) } }
 
       describe 'mkey, first_name, status' do
         let(:options) { { users: users.map(&:mkey), attrs: [:mkey, :first_name, :status] } }
 
         it do
           expected = users.map { |u| { mkey: u.mkey, first_name: u.first_name, status: u.status } }
+          is_expected.to match_array(expected)
+        end
+      end
+
+      describe 'verified_at' do
+        let(:options) { { users: users.map(&:mkey), attrs: [:mkey, :verified_at] } }
+
+        before do
+          5.times { |n| verify_at(users[n].mkey, Time.parse("#{n+1}-01-2016")) }
+        end
+
+        it do
+          expected = [
+            { mkey: users[0].mkey, verified_at: Time.parse('01-01-2016') },
+            { mkey: users[1].mkey, verified_at: Time.parse('02-01-2016') },
+            { mkey: users[2].mkey, verified_at: Time.parse('03-01-2016') },
+            { mkey: users[3].mkey, verified_at: Time.parse('04-01-2016') },
+            { mkey: users[4].mkey, verified_at: Time.parse('05-01-2016') }
+          ]
           is_expected.to match_array(expected)
         end
       end
