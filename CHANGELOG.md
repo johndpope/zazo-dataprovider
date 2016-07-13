@@ -1,5 +1,8 @@
 # Changelog
 
+### next release
+- :bulb: Added new users query `FindByMobile`
+
 ### v0.3.2
 - :bulb: Refactored `Users::Queries::Attributes` query to get attributes on collection
 - :arrow_up: Extended `Users::Queries::Attributes` query to accept `users` array
